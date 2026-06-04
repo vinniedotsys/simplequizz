@@ -41,5 +41,7 @@ async def on_message(message):
                      "What do you call a gazelle in a \
                      lions territory? Denzel."]
             await message.channel.send(random.choice(jokes))
+        elif user_message.lower() == "steve ?":
+            await message.channel.send(file=discord.File('steve.jpg'))
 
 client.run(TOKEN)
