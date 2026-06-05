@@ -24,6 +24,11 @@ async def on_message(message):
 
     print(f'Message {user_message} by {username} on {channel}')
 
+    if message.author == client.user and user_message.lower() == "what do you think ?":
+        emojis = ["🍑","🍆","⏭️"]
+        for emoji in emojis:
+            await message.add_reaction(emoji)
+        
     if message.author == client.user:
         return
 
@@ -43,5 +48,6 @@ async def on_message(message):
             await message.channel.send(random.choice(jokes))
         elif user_message.lower() == "steve ?":
             await message.channel.send(file=discord.File('steve.jpg'))
+            await message.channel.send('What do you think ?')
 
 client.run(TOKEN)
