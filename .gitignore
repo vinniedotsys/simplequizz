@@ -13,3 +13,4 @@ wheels/
 # Images
 *.png
 *.jpg
+data/
