@@ -6,8 +6,9 @@ class DBObject:
     TABLE = ""
     FIELDS = ()
 
-    def __init__(self, db_path) -> None:
+    def __init__(self, db_path, id=uuid.uuid4()) -> None:
         self.db_path = db_path
+        self.id = id
         self.check_db()
         self.check_table()
 
@@ -31,5 +32,4 @@ class Players(DBObject):
     FIELDS = ("id","name")
     def __init__(self, db_path, name) -> None:
         super().__init__(db_path)
-        self.id = uuid.uuid4()
         self.name = name
