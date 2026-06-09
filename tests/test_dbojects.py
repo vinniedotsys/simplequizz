@@ -17,3 +17,4 @@ class DBOTest(unittest.TestCase):
         tables = res.fetchone()
         test_table = "players" in tables
         self.assertEqual(test_table, True)
+

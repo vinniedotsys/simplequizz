@@ -4,7 +4,7 @@ import uuid
 
 class DBObject:
     TABLE = ""
-    FIELDS = ()
+    FIELDS = ""
 
     def __init__(self, db_path, id=uuid.uuid4()) -> None:
         self.db_path = db_path
@@ -29,7 +29,14 @@ class DBObject:
 
 class Players(DBObject):
     TABLE = "players"
-    FIELDS = ("id","name")
-    def __init__(self, db_path, name) -> None:
-        super().__init__(db_path)
+    FIELDS = "(id TEXT PRIMARY KEY, name TEXT)"
+    def __init__(self, db_path, name, id=uuid.uuid4()) -> None:
+        super().__init__(db_path, id)
         self.name = name
+
+class Games(DBObject):
+    TABLE = "games"
+    FIELDS = "(id TEXT PRIMARY KEY, question_number INTEGER, winner TEXT, gamemaster TEXT, FOREIGN KEY(winner,gamemaster) REFERENCES player(id))"
+    def __init__(self, db_path, question_number, id=uuid.uuid4()) -> None:
+        super().__init__(db_path, id)
+        self.question_number = question_number
