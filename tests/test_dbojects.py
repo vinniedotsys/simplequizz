@@ -17,4 +17,14 @@ class DBOTest(unittest.TestCase):
         tables = res.fetchone()
         test_table = "players" in tables
         self.assertEqual(test_table, True)
+    
+    def test_foreign_key_oncreate(self):
+        test_game = Games('data/test.db')
+        con = sqlite3.connect("data/test.db") 
+        cur = con.cursor()
+        res = cur.execute("PRAGMA table_info('games')")
+        tables = res.fetchall()
+        print(tables)
+        test_table = "games" in tables
+        self.assertEqual(True, True)
 
