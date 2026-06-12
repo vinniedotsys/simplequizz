@@ -22,10 +22,10 @@ class DBOTest(unittest.TestCase):
         test_game = Games('data/test.db')
         con = sqlite3.connect("data/test.db") 
         cur = con.cursor()
-        res = cur.execute("PRAGMA table_info('games')")
-        tables = res.fetchall()
-        test_table = "games" in tables
-        self.assertEqual(True, True)
+        res = cur.execute("PRAGMA foreign_key_list('games')")
+        foreign_keys = res.fetchall()
+        tables = str(foreign_keys[0][3]) + " " + str(foreign_keys[1][3])
+        self.assertEqual("winner gamemaster", tables)
 
     def test_remaing_objects(self):
         test_choice = Choices('data/test.db')
@@ -33,7 +33,6 @@ class DBOTest(unittest.TestCase):
         test_player_answer = PlayerAnswers('data/test.db')
         con = sqlite3.connect('data/test.db')
         cur = con.cursor()
-        res = cur.execute("SELECT name FROM sqlite_master")
-        tables = res.fetchall()
-        print(tables)
-
+        res = cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = str(res.fetchall())
+        self.assertEqual("[('players',), ('games',), ('choices',), ('questions',), ('player_answers',)]", tables)
