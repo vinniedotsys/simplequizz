@@ -15,6 +15,7 @@ class DBOTest(unittest.TestCase):
         cur = con.cursor()
         res = cur.execute("SELECT name FROM sqlite_master")
         tables = res.fetchone()
+        con.close()
         test_table = "players" in tables
         self.assertEqual(test_table, True)
     
@@ -24,6 +25,7 @@ class DBOTest(unittest.TestCase):
         cur = con.cursor()
         res = cur.execute("PRAGMA foreign_key_list('games')")
         foreign_keys = res.fetchall()
+        con.close()
         tables = str(foreign_keys[0][3]) + " " + str(foreign_keys[1][3])
         self.assertEqual("winner gamemaster", tables)
 
@@ -35,4 +37,14 @@ class DBOTest(unittest.TestCase):
         cur = con.cursor()
         res = cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
         tables = str(res.fetchall())
+        con.close()
         self.assertEqual("[('players',), ('games',), ('choices',), ('questions',), ('player_answers',)]", tables)
+
+    def test_insert(self):
+        test_player = Players('data/test.db')
+        test_player.insert("LouisdeGie")
+        con = sqlite3.connect('data/test.db')
+        cur = con.cursor()
+        res = cur.execute("SELECT name FROM players WHERE name = 'LouisdeGie'")
+        test = res.fetchone() is None
+        self.assertEqual(test, False)
