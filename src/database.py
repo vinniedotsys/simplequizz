@@ -37,10 +37,17 @@ class DBObject:
             raise ValueError("Not a valid ID")
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
-        res = cur.execute(f"SELECT * FROM {self.TABLE} WHERE id='?'", id)
-        if res.fetchone() is None:
+        res = cur.execute(f"SELECT * FROM {self.TABLE} WHERE id=?", (id,))
+        line = res.fetchone()
+        if line is None:
             raise Exception("Record not found")
-
+        i = 0
+        for keys in vars(self):
+            if keys == "db_path":
+                continue
+            else:
+                setattr(self, keys, line[i])
+                i += 1
 
     def insert(self, *fields):
         diff = len(vars(self)) - len(fields)

@@ -48,3 +48,9 @@ class DBOTest(unittest.TestCase):
         res = cur.execute("SELECT name FROM players WHERE name = 'LouisdeGie'")
         test = res.fetchone() is None
         self.assertEqual(test, False)
+
+    def test_get(self):
+        test_player = Players('data/test.db')
+        test_player.get("019ed227090c765abc9e2aa2801a6aa1")
+        result = {'db_path': 'data/test.db', 'id': '019ed227090c765abc9e2aa2801a6aa1', 'name': 'LouisdeGie'}
+        self.assertEqual(result, vars(test_player))
