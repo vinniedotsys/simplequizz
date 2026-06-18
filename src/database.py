@@ -39,6 +39,7 @@ class DBObject:
         cur = con.cursor()
         res = cur.execute(f"SELECT * FROM {self.TABLE} WHERE id=?", (id,))
         line = res.fetchone()
+        con.close()
         if line is None:
             raise Exception("Record not found")
         i = 0
@@ -59,6 +60,7 @@ class DBObject:
         cur.execute(f"INSERT INTO {self.TABLE} VALUES ('{self.id}', ?)", fields)
         con.commit()
         con.close()
+        self.get(self.id)
 
 
 class Players(DBObject):
