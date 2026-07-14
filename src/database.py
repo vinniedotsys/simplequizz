@@ -79,12 +79,14 @@ class Games(DBObject):
 
 class Questions(DBObject):
     TABLE = "questions"
-    FIELDS = "(id TEXT PRIMARY KEY, game TEXT, answer TEXT, number INTEGER, FOREIGN KEY(game) REFERENCES games(id), FOREIGN KEY(answer) REFERENCES choices(id))"
+    FIELDS = "(id TEXT PRIMARY KEY, game TEXT, answer TEXT, question_image BLOB, answer_image BLOB, number INTEGER, FOREIGN KEY(game) REFERENCES games(id), FOREIGN KEY(answer) REFERENCES choices(id))"
     def __init__(self, db_path, id=str(uuid.uuid7().hex)) -> None:
         super().__init__(db_path, id)
         self.game: Optional[str] = None
         self.answer: Optional[str] = None
         self.order: Optional[int] = None
+        self.question_image: Optional[bytes] = None
+        self.answer_image: Optional[bytes] = None
 
 class Choices(DBObject):
     TABLE = "choices"
