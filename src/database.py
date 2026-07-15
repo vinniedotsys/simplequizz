@@ -90,7 +90,7 @@ class Questions(DBObject):
 
 class Choices(DBObject):
     TABLE = "choices"
-    FIELDS = "(id TEXT PRIMARY KEY, emoji TEXT, question TEXT, FOREIGN KEY(question) REFERENCES games(id))"
+    FIELDS = "(id TEXT PRIMARY KEY, emoji TEXT, game TEXT, FOREIGN KEY(game) REFERENCES games(id))"
     def __init__(self, db_path, id=str(uuid.uuid7().hex)) -> None:
         super().__init__(db_path, id)
         self.emoji: Optional[str] = None

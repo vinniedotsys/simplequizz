@@ -13,4 +13,9 @@ wheels/
 # Images
 *.png
 *.jpg
+
+# Data
 data/
+
+# Conf
+*.json
