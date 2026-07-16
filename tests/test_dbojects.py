@@ -6,7 +6,7 @@ from src.database import *
 
 class DBOTest(unittest.TestCase):
     def test_empty_db(self):
-        test_player = Players('data/test.db')
+        test_player = Player('data/test.db')
         test_path = os.path.isfile('data/test.db')
         self.assertEqual(test_path, True)
 
@@ -20,7 +20,7 @@ class DBOTest(unittest.TestCase):
         self.assertEqual(test_table, True)
     
     def test_foreign_key_oncreate(self):
-        test_game = Games('data/test.db')
+        test_game = Game('data/test.db')
         con = sqlite3.connect("data/test.db") 
         cur = con.cursor()
         res = cur.execute("PRAGMA foreign_key_list('games')")
@@ -30,9 +30,9 @@ class DBOTest(unittest.TestCase):
         self.assertEqual("winner gamemaster", tables)
 
     def test_remaing_objects(self):
-        test_choice = Choices('data/test.db')
-        test_question = Questions('data/test.db')
-        test_player_answer = PlayerAnswers('data/test.db')
+        test_choice = Choice('data/test.db')
+        test_question = Question('data/test.db')
+        test_player_answer = PlayerAnswer('data/test.db')
         con = sqlite3.connect('data/test.db')
         cur = con.cursor()
         res = cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -41,7 +41,7 @@ class DBOTest(unittest.TestCase):
         self.assertEqual("[('players',), ('games',), ('choices',), ('questions',), ('player_answers',)]", tables)
 
     def test_insert(self):
-        test_player = Players('data/test.db')
+        test_player = Player('data/test.db')
         test_player.insert("LouisdeGie")
         con = sqlite3.connect('data/test.db')
         cur = con.cursor()

@@ -63,21 +63,23 @@ class DBObject:
         self.get(self.id)
 
 
-class Players(DBObject):
+class Player(DBObject):
     TABLE = "players"
     FIELDS = "(id TEXT PRIMARY KEY, name TEXT)"
     def __init__(self, db_path, id=str(uuid.uuid7().hex)) -> None:
         super().__init__(db_path, id)
         self.name: Optional[str] = None
 
-class Games(DBObject):
+class Game(DBObject):
     TABLE = "games"
     FIELDS = "(id TEXT PRIMARY KEY, question_number INTEGER, winner TEXT, gamemaster TEXT, FOREIGN KEY(winner,gamemaster) REFERENCES players(id,id))"
     def __init__(self, db_path, id=str(uuid.uuid7().hex)) -> None:
         super().__init__(db_path, id)
         self.question_number: Optional[int] = None
+        self.winner: Optional[str] = None
+        self.gamemaster: Optional[str] = None
 
-class Questions(DBObject):
+class Question(DBObject):
     TABLE = "questions"
     FIELDS = "(id TEXT PRIMARY KEY, game TEXT, answer TEXT, question_image BLOB, answer_image BLOB, number INTEGER, FOREIGN KEY(game) REFERENCES games(id), FOREIGN KEY(answer) REFERENCES choices(id))"
     def __init__(self, db_path, id=str(uuid.uuid7().hex)) -> None:
@@ -88,7 +90,7 @@ class Questions(DBObject):
         self.question_image: Optional[bytes] = None
         self.answer_image: Optional[bytes] = None
 
-class Choices(DBObject):
+class Choice(DBObject):
     TABLE = "choices"
     FIELDS = "(id TEXT PRIMARY KEY, emoji TEXT, game TEXT, FOREIGN KEY(game) REFERENCES games(id))"
     def __init__(self, db_path, id=str(uuid.uuid7().hex)) -> None:
@@ -96,7 +98,7 @@ class Choices(DBObject):
         self.emoji: Optional[str] = None
         self.question: Optional[str] = None
 
-class PlayerAnswers(DBObject):
+class PlayerAnswer(DBObject):
     TABLE = "player_answers"
     FIELDS = "(id TEXT PRIMARY KEY, question TEXT, player TEXT, answer TEXT, result INTEGER, FOREIGN KEY(question) REFERENCES questions(id), FOREIGN KEY(player) REFERENCES players(id), FOREIGN KEY(answer) REFERENCES choices(id))"
     def __init__(self, db_path, id=str(uuid.uuid7().hex)) -> None:
