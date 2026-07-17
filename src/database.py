@@ -50,16 +50,22 @@ class DBObject:
                 setattr(self, keys, line[i])
                 i += 1
 
-    def insert(self, *fields):
-        diff = len(vars(self)) - len(fields)
-        diff -= 2 #always self defined
-        if diff != 0:
-            raise Exception(f"Missing {diff} fields Table fields : {self.FIELDS}")
+    def insert(self):
+        excluded = {"db_path", "id"}
+        data = {k: v for k, v in vars(self).items() if k not in excluded}
+     
+        columns = ", ".join(data.keys())
+        placeholders = ", ".join(["?" for _ in data])
+        values = tuple(data.values())
+     
+        query = f"INSERT INTO {self.TABLE} (id, {columns}) VALUES (?, {placeholders})"
+     
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
-        cur.execute(f"INSERT INTO {self.TABLE} VALUES ('{self.id}', ?)", fields)
+        cur.execute(query, (self.id, *values))
         con.commit()
         con.close()
+     
         self.get(self.id)
 
 
@@ -96,7 +102,7 @@ class Choice(DBObject):
     def __init__(self, db_path, id=str(uuid.uuid7().hex)) -> None:
         super().__init__(db_path, id)
         self.emoji: Optional[str] = None
-        self.question: Optional[str] = None
+        self.game: Optional[str] = None
 
 class PlayerAnswer(DBObject):
     TABLE = "player_answers"

@@ -42,7 +42,8 @@ class DBOTest(unittest.TestCase):
 
     def test_insert(self):
         test_player = Player('data/test.db')
-        test_player.insert("LouisdeGie")
+        test_player.name = "LouisdeGie"
+        test_player.insert()
         con = sqlite3.connect('data/test.db')
         cur = con.cursor()
         res = cur.execute("SELECT name FROM players WHERE name = 'LouisdeGie'")
