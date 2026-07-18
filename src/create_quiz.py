@@ -37,7 +37,7 @@ def create_from_conf(db_path, conf_path):
         new_question = Question(db_path)
         new_question.game = new_game.id
         new_question.answer = choices_ref[questions[key][1]]
+        new_question.number = order_num.pop()
         new_question.question_image = image_to_base64(key)
         new_question.answer_image = image_to_base64(questions[key][0])
-        new_question.order = order_num.pop()
         new_question.insert()

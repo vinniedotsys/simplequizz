@@ -5,6 +5,7 @@ import sqlite3
 from src.database import *
 
 class DBOTest(unittest.TestCase):
+
     def test_empty_db(self):
         test_player = Player('data/test.db')
         test_path = os.path.isfile('data/test.db')
@@ -51,7 +52,7 @@ class DBOTest(unittest.TestCase):
         self.assertEqual(test, False)
 
 #    def test_get(self):
-#        test_player = Players('data/test.db')
-#        test_player.get("019ed227090c765abc9e2aa2801a6aa1")
+#        test_player = Player('data/test.db')
+#        test_player.get(self.shared_user)
 #        result = {'db_path': 'data/test.db', 'id': '019ed227090c765abc9e2aa2801a6aa1', 'name': 'LouisdeGie'}
-#        self.assertEqual(result, vars(test_player))
+#        self.assertEqual(self.shared_user, test_player.id)
