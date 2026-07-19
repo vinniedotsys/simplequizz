@@ -41,8 +41,8 @@ class DBOTest(unittest.TestCase):
         con.close()
         self.assertEqual("[('players',), ('games',), ('choices',), ('questions',), ('player_answers',)]", tables)
 
-    def test_insert(self):
-        test_player = Player('data/test.db')
+    def test_0insert(self):
+        test_player = Player('data/test.db', '019ed227090c765abc9e2aa2801a6aa1')
         test_player.name = "LouisdeGie"
         test_player.insert()
         con = sqlite3.connect('data/test.db')
@@ -51,8 +51,8 @@ class DBOTest(unittest.TestCase):
         test = res.fetchone() is None
         self.assertEqual(test, False)
 
-#    def test_get(self):
-#        test_player = Player('data/test.db')
-#        test_player.get(self.shared_user)
-#        result = {'db_path': 'data/test.db', 'id': '019ed227090c765abc9e2aa2801a6aa1', 'name': 'LouisdeGie'}
-#        self.assertEqual(self.shared_user, test_player.id)
+    def test_1get(self):
+        test_player = Player('data/test.db')
+        test_player.get("019ed227090c765abc9e2aa2801a6aa1")
+        result = {'db_path': 'data/test.db', 'id': '019ed227090c765abc9e2aa2801a6aa1', 'name': 'LouisdeGie'}
+        self.assertEqual(result, vars(test_player))
