@@ -56,3 +56,15 @@ class DBOTest(unittest.TestCase):
         test_player.get("019ed227090c765abc9e2aa2801a6aa1")
         result = {'db_path': 'data/test.db', 'id': '019ed227090c765abc9e2aa2801a6aa1', 'name': 'LouisdeGie'}
         self.assertEqual(result, vars(test_player))
+
+    def test_2update(self):
+        test_player = Player('data/test.db')
+        test_player.get("019ed227090c765abc9e2aa2801a6aa1")
+        test_player.name = "Louis2Gie"
+        test_player.update()
+        con = sqlite3.connect('data/test.db')
+        cur = con.cursor()
+        res = cur.execute("SELECT name FROM players WHERE id = '019ed227090c765abc9e2aa2801a6aa1'")
+        test = res.fetchone()
+        self.assertEqual("Louis2Gie",test[0])
+

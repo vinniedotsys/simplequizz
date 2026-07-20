@@ -34,7 +34,9 @@ class DBObject:
             cur.execute(f"CREATE TABLE {self.TABLE}{self.FIELDS}")
         con.close()
 
-    def get(self, id):
+    def get(self, id=None):
+        if id is None:
+            id = self.id
         if len(id) != 32:
             raise ValueError("Not a valid ID")
         con = sqlite3.connect(self.db_path)
@@ -68,6 +70,22 @@ class DBObject:
         con.commit()
         con.close()
      
+        self.get()
+
+    def update(self):
+        excluded = {"db_path", "id"}
+        data = {k: v for k, v in vars(self).items() if k not in excluded}
+
+        set_clause = ", ".join([f"{k} = ?" for k in data.keys()])
+        values = tuple(data.values())
+
+        query = f"UPDATE {self.TABLE} SET {set_clause} WHERE id = ?"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        cur.execute(query, (*values, self.id))
+        con.commit()
+        con.close()
+
         self.get(self.id)
 
 
