@@ -1,6 +1,6 @@
 import os
 import sqlite3
-import uuid
+import uuid6
 
 from typing import Optional
 
@@ -10,7 +10,7 @@ class DBObject:
 
     def __init__(self, db_path, id=None) -> None:
         if id is None:
-            id = str(uuid.uuid7().hex)
+            id = str(uuid6.uuid7().hex)
         self.db_path = db_path
         if len(id) != 32:
             raise ValueError("Not a valid ID")
@@ -91,10 +91,11 @@ class DBObject:
 
 class Player(DBObject):
     TABLE = "players"
-    FIELDS = "(id TEXT PRIMARY KEY, name TEXT)"
+    FIELDS = "(id TEXT PRIMARY KEY, name TEXT, discord_id INTEGER)"
     def __init__(self, db_path, id=None) -> None:
         super().__init__(db_path, id)
         self.name: Optional[str] = None
+        self.discord_id: Optional[int] = None
 
 class Game(DBObject):
     TABLE = "games"
