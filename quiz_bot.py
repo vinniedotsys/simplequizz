@@ -4,6 +4,7 @@ import discord
 
 from dotenv import load_dotenv
 from src.quiz_helper import *
+from discord.ext import commands
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -11,6 +12,8 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
+
+bot = commands.Bot(command_prefix='q!', intents=intents)
 
 @client.event
 async def on_ready():
@@ -37,6 +40,9 @@ async def on_reaction_add(reaction, user):
         db = db_path(reaction.message.guild.id)
         check_player(db, user)
 
+@bot.command(name='quiz', help='Launch an available quiz where the user is the gamemaster')
+async def quiz(ctx):
+    pass
 
 
 

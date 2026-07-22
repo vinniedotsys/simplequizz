@@ -97,6 +97,23 @@ class Player(DBObject):
         self.name: Optional[str] = None
         self.discord_id: Optional[int] = None
 
+    def is_player(self):
+        if self.discord_id is None:
+            Exception("No valid Discord User ID")
+        query = "SELECT name,id FROM players WHERE discord_id = ?"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.discord_id,))
+        player = res.fetchone()
+        con.close()
+        if player is None:
+            self.insert()
+            return
+        if self.name != player[0]:
+            self.id = player[1]
+            self.update()
+            return
+
 class Game(DBObject):
     TABLE = "games"
     FIELDS = "(id TEXT PRIMARY KEY, question_number INTEGER, winner TEXT, gamemaster TEXT, FOREIGN KEY(winner,gamemaster) REFERENCES players(id,id))"
