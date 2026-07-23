@@ -123,6 +123,16 @@ class Game(DBObject):
         self.winner: Optional[str] = None
         self.gamemaster: Optional[str] = None
 
+    def available(self):
+        query = "SELECT id,question_number FROM games WHERE winner = '' AND gamemaster = ?"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.gamemaster,))
+        games = res.fetchall()
+        con.close()
+        return games
+
+
 class Question(DBObject):
     TABLE = "questions"
     FIELDS = "(id TEXT PRIMARY KEY, game TEXT, answer TEXT, question_image BLOB, answer_image BLOB, number INTEGER, FOREIGN KEY(game) REFERENCES games(id), FOREIGN KEY(answer) REFERENCES choices(id))"

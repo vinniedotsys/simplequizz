@@ -13,7 +13,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
-bot = commands.Bot(command_prefix='q!', intents=intents)
+bot = commands.Bot(command_prefix='$', intents=intents)
 
 @client.event
 async def on_ready():
@@ -42,8 +42,12 @@ async def on_reaction_add(reaction, user):
 
 @bot.command(name='quiz', help='Launch an available quiz where the user is the gamemaster')
 async def quiz(ctx):
-    pass
+    username = str(ctx.author).split("#")[0]
+    print(f"User {username} launched command quiz")
 
+    db = db_path(ctx.guild.id)
+    gamemaster = check_player(db, ctx.author.id)
+    await game_available(ctx, db, gamemaster)
 
 
 
