@@ -11,17 +11,16 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents = discord.Intents.default()
 intents.message_content = True
-client = discord.Client(intents=intents)
 
-bot = commands.Bot(command_prefix='$', intents=intents)
+bot = commands.Bot(command_prefix='q!', intents=intents)
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
-    for guild in client.guilds:
+    print(f'{bot.user} has connected to Discord!')
+    for guild in bot.guilds:
         print(f'Connected to {guild.name}, ID : {guild.id}')
 
-@client.event
+@bot.event
 async def on_message(message):
     username = str(message.author).split("#")[0]
     channel = str(message.channel.name)
@@ -31,12 +30,13 @@ async def on_message(message):
         if user_message.lower() == "hello" or user_message.lower() == "hi":
             await message.channel.send(f'Hello {username}')
 
+    await bot.process_commands(message)
 
-@client.event
+@bot.event
 async def on_reaction_add(reaction, user):
     username = str(user).split("#")[0]
     print(f"User {username} reacted to a message")
-    if reaction.message.author == client.user:
+    if reaction.message.author == bot.user:
         db = db_path(reaction.message.guild.id)
         check_player(db, user)
 
@@ -46,9 +46,9 @@ async def quiz(ctx):
     print(f"User {username} launched command quiz")
 
     db = db_path(ctx.guild.id)
-    gamemaster = check_player(db, ctx.author.id)
-    await game_available(ctx, db, gamemaster)
+    gamemaster = check_player(db, ctx.author)
+    await game_available(ctx, db, gamemaster.id)
 
 
 
-client.run(TOKEN)
+bot.run(TOKEN)

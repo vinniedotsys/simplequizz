@@ -113,6 +113,8 @@ class Player(DBObject):
             self.id = player[1]
             self.update()
             return
+        self.get(player[1])
+        return
 
 class Game(DBObject):
     TABLE = "games"
@@ -124,11 +126,12 @@ class Game(DBObject):
         self.gamemaster: Optional[str] = None
 
     def available(self):
-        query = "SELECT id,question_number FROM games WHERE winner = '' AND gamemaster = ?"
+        query = "SELECT id,question_number FROM games WHERE winner IS NULL AND gamemaster = ?"
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
         res = cur.execute(query, (self.gamemaster,))
         games = res.fetchall()
+        print(games)
         con.close()
         return games
 
