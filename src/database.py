@@ -131,7 +131,6 @@ class Game(DBObject):
         cur = con.cursor()
         res = cur.execute(query, (self.gamemaster,))
         games = res.fetchall()
-        print(games)
         con.close()
         return games
 

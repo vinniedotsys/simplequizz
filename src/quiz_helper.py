@@ -20,7 +20,6 @@ def check_player(db_path, discord_member):
 async def game_available(ctx, db_path, gamemaster):
     game = Game(db_path)
     game.gamemaster = str(gamemaster)
-    print(game.gamemaster)
     games_available = game.available()
     nbr_games = len(games_available)
 
