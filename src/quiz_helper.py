@@ -33,5 +33,7 @@ async def game_available(ctx, db_path, gamemaster):
             await ctx.send(f"You have {nbr_games} games available :")
             for game in games_available:
                 await ctx.send(f"Game {nb} : {game[1]} questions")
-            await ctx.send(f"Please launch the quiz command with a game ID")
     return nbr_games, games_available
+
+async def quiz_logic(ctx, db_path, game):
+    pass

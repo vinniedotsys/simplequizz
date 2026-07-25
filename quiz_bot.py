@@ -1,10 +1,11 @@
 import os
-import random
 import discord
+import logging
 
 from dotenv import load_dotenv
 from src.quiz_helper import *
 from discord.ext import commands
+from typing import Optional
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -16,9 +17,9 @@ bot = commands.Bot(command_prefix='q!', intents=intents)
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} has connected to Discord!')
+    logging.info(f'{bot.user} has connected to Discord!')
     for guild in bot.guilds:
-        print(f'Connected to {guild.name}, ID : {guild.id}')
+        logging.info(f'Connected to {guild.name}, ID : {guild.id}')
 
 @bot.event
 async def on_message(message):
@@ -35,20 +36,36 @@ async def on_message(message):
 @bot.event
 async def on_reaction_add(reaction, user):
     username = str(user).split("#")[0]
-    print(f"User {username} reacted to a message")
+    logging.info(f"User {username} reacted to a message")
     if reaction.message.author == bot.user:
         db = db_path(reaction.message.guild.id)
         check_player(db, user)
 
 @bot.command(name='quiz', help='Launch an available quiz where the user is the gamemaster')
-async def quiz(ctx):
+async def quiz(ctx: commands.Context, arg: Optional[int]):
     username = str(ctx.author).split("#")[0]
-    print(f"User {username} launched command quiz")
+    logging.info(f"User {username} launched command quiz")
 
     db = db_path(ctx.guild.id)
     gamemaster = check_player(db, ctx.author)
-    await game_available(ctx, db, gamemaster.id)
+    nbr_games, games_available = await game_available(ctx, db, gamemaster.id)
 
+    if arg is None:
+        match nbr_games:
+            case 0:
+                pass
+            case 1:
+                await quiz_logic(ctx, db, games_available[0])
+            case _:
+                await ctx.send(f"Please launch the quiz command with a game ID")
+    else:
+        match nbr_games:
+            case 0:
+                pass
+            case 1:
+                await quiz_logic(ctx, db, games_available[0][0])
+            case _:
+                await quiz_logic(ctx, db, games_available[arg][0])
 
 
 bot.run(TOKEN)
