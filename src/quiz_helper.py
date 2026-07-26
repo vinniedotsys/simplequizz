@@ -36,4 +36,8 @@ async def game_available(ctx, db_path, gamemaster):
     return nbr_games, games_available
 
 async def quiz_logic(ctx, db_path, game):
-    pass
+    current_quiz = Game(db_path)
+    current_quiz.get(game)
+    questions = current_quiz.questions()
+    for question in questions:
+        pass

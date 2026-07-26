@@ -134,6 +134,15 @@ class Game(DBObject):
         con.close()
         return games
 
+    def questions(self):
+        query = "SELECT id FROM questions WHERE game = ? ORDER BY number"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.id,))
+        questions = res.fetchall()
+        con.close()
+        return questions
+
 
 class Question(DBObject):
     TABLE = "questions"
