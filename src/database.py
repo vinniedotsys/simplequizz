@@ -141,8 +141,16 @@ class Game(DBObject):
         res = cur.execute(query, (self.id,))
         questions = res.fetchall()
         con.close()
-        return questions
+        return [q[0] for q in questions]
 
+    def emojis(self):
+        query = "SELECT emoji FROM choices WHERE game = ? ORDER BY id"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.id,))
+        emojis = res.fetchall()
+        con.close()
+        return [e[0] for e in emojis]
 
 class Question(DBObject):
     TABLE = "questions"

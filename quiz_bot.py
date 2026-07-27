@@ -49,13 +49,12 @@ async def quiz(ctx: commands.Context, arg: Optional[int]):
     db = db_path(ctx.guild.id)
     gamemaster = check_player(db, ctx.author)
     nbr_games, games_available = await game_available(ctx, db, gamemaster.id)
-
     if arg is None:
         match nbr_games:
             case 0:
                 pass
             case 1:
-                await quiz_logic(ctx, db, games_available[0])
+                await quiz_logic(ctx, db, games_available[0][0])
             case _:
                 await ctx.send(f"Please launch the quiz command with a game ID")
     else:

@@ -1,4 +1,5 @@
 import discord
+import io
 
 from src.database import *
 
@@ -39,5 +40,14 @@ async def quiz_logic(ctx, db_path, game):
     current_quiz = Game(db_path)
     current_quiz.get(game)
     questions = current_quiz.questions()
-    for question in questions:
-        pass
+    emojis = current_quiz.emojis()
+    emojis.append("☑️")
+    nbr = 1
+    for id in questions:
+        question = Question(db_path, id)
+        question.get()
+        await ctx.send(f"Question {nbr} :")
+        question_message = await ctx.send(file=discord.File(io.BytesIO(question.question_image), f"question_{nbr}.jpg"))
+        for emoji in emojis:
+            await question_message.add_reaction(emoji)
+        nbr +=1
