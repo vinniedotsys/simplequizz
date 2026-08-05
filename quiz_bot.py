@@ -54,7 +54,7 @@ async def quiz(ctx: commands.Context, arg: Optional[int]):
             case 0:
                 pass
             case 1:
-                await quiz_logic(ctx, db, games_available[0][0])
+                await quiz_logic(ctx, db, games_available[0][0], bot)
             case _:
                 await ctx.send(f"Please launch the quiz command with a game ID")
     else:
@@ -62,9 +62,9 @@ async def quiz(ctx: commands.Context, arg: Optional[int]):
             case 0:
                 pass
             case 1:
-                await quiz_logic(ctx, db, games_available[0][0])
+                await quiz_logic(ctx, db, games_available[0][0], bot)
             case _:
-                await quiz_logic(ctx, db, games_available[arg][0])
+                await quiz_logic(ctx, db, games_available[arg][0], bot)
 
 
 bot.run(TOKEN)

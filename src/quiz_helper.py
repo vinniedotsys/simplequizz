@@ -18,6 +18,7 @@ def check_player(db_path, discord_member):
     player.is_player()
     return player
 
+
 async def game_available(ctx, db_path, gamemaster):
     game = Game(db_path)
     game.gamemaster = str(gamemaster)
@@ -36,13 +37,19 @@ async def game_available(ctx, db_path, gamemaster):
                 await ctx.send(f"Game {nb} : {game[1]} questions")
     return nbr_games, games_available
 
-async def quiz_logic(ctx, db_path, game):
+async def quiz_logic(ctx, db_path, game, bot):
     current_quiz = Game(db_path)
     current_quiz.get(game)
     questions = current_quiz.questions()
     emojis = current_quiz.emojis()
     emojis.append("☑️")
+    gamemaster = Player(db_path, current_quiz.gamemaster)
+    gamemaster.get()
     nbr = 1
+
+    def check(reaction, user):            
+            return user == gamemaster.discord_id and str(reaction.emoji) == '☑️'
+
     for id in questions:
         question = Question(db_path, id)
         question.get()
@@ -50,4 +57,5 @@ async def quiz_logic(ctx, db_path, game):
         question_message = await ctx.send(file=discord.File(io.BytesIO(question.question_image), f"question_{nbr}.jpg"))
         for emoji in emojis:
             await question_message.add_reaction(emoji)
+        await bot.wait_for('reaction_add', check=check)
         nbr +=1
