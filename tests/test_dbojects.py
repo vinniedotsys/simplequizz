@@ -54,7 +54,7 @@ class DBOTest(unittest.TestCase):
     def test_1get(self):
         test_player = Player('data/test.db')
         test_player.get("019ed227090c765abc9e2aa2801a6aa1")
-        result = {'db_path': 'data/test.db', 'id': '019ed227090c765abc9e2aa2801a6aa1', 'name': 'LouisdeGie'}
+        result = {'db_path': 'data/test.db', 'id': '019ed227090c765abc9e2aa2801a6aa1', 'discord_id': None, 'name': 'LouisdeGie'}
         self.assertEqual(result, vars(test_player))
 
     def test_2update(self):
