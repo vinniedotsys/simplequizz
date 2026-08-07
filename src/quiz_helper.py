@@ -47,10 +47,10 @@ async def quiz_logic(ctx, db_path, game, bot):
     gamemaster.get()
     nbr = 1
 
-    def check(reaction, user):            
-            return user == gamemaster.discord_id and str(reaction.emoji) == '☑️'
 
     for id in questions:
+        def check(reaction, user):            
+                return user.id == gamemaster.discord_id and str(reaction.emoji) == '☑️'
         question = Question(db_path, id)
         question.get()
         await ctx.send(f"Question {nbr} :")
