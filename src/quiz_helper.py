@@ -19,6 +19,12 @@ def check_player(db_path, discord_member):
     return player
 
 
+def get_answer(question, question_message):
+    for answer in question_message.reactions:
+        print(answer)
+
+
+
 async def game_available(ctx, db_path, gamemaster):
     game = Game(db_path)
     game.gamemaster = str(gamemaster)
