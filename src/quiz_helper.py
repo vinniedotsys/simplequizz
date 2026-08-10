@@ -19,9 +19,8 @@ def check_player(db_path, discord_member):
     return player
 
 
-def get_answer(question, question_message):
-    for answer in question_message.reactions:
-        
+def get_answer(player, answer, question_id):
+    pass
 
 
 
@@ -68,5 +67,7 @@ async def quiz_logic(ctx, db_path, game, bot):
         for answer in complete_question_message.reactions:
             if answer not in emojis or answer == '☑️' :
                 continue
-            async for user in answer.users(limit=None)
+            async for user in answer.users(limit=None):
+                player = check_player(db_path, user.id)
+                get_answer(player, answer, id)
         nbr +=1
