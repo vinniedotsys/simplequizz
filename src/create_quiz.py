@@ -34,6 +34,7 @@ def create_from_conf(db_path, conf_path):
         choices_ref[choice] = new_choice.id
 
     for key in questions:
+        print(key)
         new_question = Question(db_path)
         new_question.game = new_game.id
         new_question.answer = choices_ref[questions[key][1]]
