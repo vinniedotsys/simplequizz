@@ -159,9 +159,9 @@ class Question(DBObject):
         super().__init__(db_path, id)
         self.game: Optional[str] = None
         self.answer: Optional[str] = None
-        self.number: Optional[int] = None
         self.question_image: Optional[bytes] = None
         self.answer_image: Optional[bytes] = None
+        self.number: Optional[int] = None
 
 class Choice(DBObject):
     TABLE = "choices"
