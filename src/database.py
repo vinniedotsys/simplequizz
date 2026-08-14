@@ -171,6 +171,15 @@ class Choice(DBObject):
         self.emoji: Optional[str] = None
         self.game: Optional[str] = None
 
+    def get_from_emoji(self):
+        query = "SELECT id FROM choices WHERE game = ? AND emoji = ?"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.game, self.emoji))
+        choice = res.fetchone()
+        con.close()
+        self.get(choice[0])
+
 class PlayerAnswer(DBObject):
     TABLE = "player_answers"
     FIELDS = "(id TEXT PRIMARY KEY, question TEXT, player TEXT, answer TEXT, result INTEGER, FOREIGN KEY(question) REFERENCES questions(id), FOREIGN KEY(player) REFERENCES players(id), FOREIGN KEY(answer) REFERENCES choices(id))"
@@ -181,3 +190,13 @@ class PlayerAnswer(DBObject):
         self.anwser: Optional[str] = None
         self.result: Optional[int] = None
 
+    def has_answered(self):
+        query = "SELECT id FROM player_answers WHERE question = ? AND player = ?"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.question, self.player))
+        answer = res.fetchone()
+        con.close()
+        if answer is None:
+            return False
+        return True

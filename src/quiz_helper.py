@@ -20,7 +20,25 @@ def check_player(db_path, discord_member):
 
 
 def get_answer(player, answer, question_id):
-    pass
+    question = Question(player.db_path)
+    question.get(question_id)
+    choice = Choice(player.db_path)
+    choice.emoji = answer
+    choice.game = question.game
+    choice.get_from_emoji()
+    player_answer = PlayerAnswer(player.db_path)
+    player_answer.question = question_id
+    player_answer.player = player.id
+    if player_answer.has_answered():
+        return
+    player_answer.anwser = choice.id
+
+    if question.answer == choice.id:
+        player_answer.result = 1
+    else:
+        player_answer.result = 0
+
+    player_answer.insert()
 
 
 
@@ -69,5 +87,8 @@ async def quiz_logic(ctx, db_path, game, bot):
                 continue
             async for user in answer.users(limit=None):
                 player = check_player(db_path, user.id)
-                get_answer(player, answer, id)
+                if player.id == gamemaster.id or user == bot.user:
+                    continue
+                else:
+                    get_answer(player, answer, id)
         nbr +=1
