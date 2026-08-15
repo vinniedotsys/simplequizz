@@ -163,6 +163,25 @@ class Question(DBObject):
         self.answer_image: Optional[bytes] = None
         self.number: Optional[int] = None
 
+    def get_results(self):
+        query = "SELECT player,result FROM player_answers WHERE question = ? ORDER BY result DESC"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.id,))
+        results = res.fetchall()
+        con.close()
+        return results
+
+    def get_answer_emoji(self):
+        query = "SELECT emoji FROM choices WHERE id = ?"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.id,))
+        emoji = res.fetchone()
+        con.close()
+        return emoji[0]
+
+
 class Choice(DBObject):
     TABLE = "choices"
     FIELDS = "(id TEXT PRIMARY KEY, emoji TEXT, game TEXT, FOREIGN KEY(game) REFERENCES games(id))"

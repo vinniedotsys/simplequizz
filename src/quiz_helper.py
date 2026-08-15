@@ -40,7 +40,14 @@ def get_answer(player, answer, question_id):
 
     player_answer.insert()
 
-
+def question_results(question_nbr, question):
+    results = question.get_results()
+    embed = discord.Embed(title=f"Question {question_nbr} results :", color=0xeceff4)
+    for result in results:
+        player = Player(question.db_path)
+        player.get(result[0])
+        embed.add_field(name=player.name, value=f"{('❌','✅')[result[1]]}", inline=False)
+    return embed
 
 async def game_available(ctx, db_path, gamemaster):
     game = Game(db_path)
@@ -72,15 +79,19 @@ async def quiz_logic(ctx, db_path, game, bot):
 
 
     for id in questions:
-        def check(reaction, user):            
+        def check_res(reaction, user):            
                 return user.id == gamemaster.discord_id and str(reaction.emoji) == '☑️'
+        
+        def check_next(reaction, user):
+            return user.id == gamemaster.discord_id and str(reaction.emoji) == '⏭️'
+
         question = Question(db_path, id)
         question.get()
         await ctx.send(f"Question {nbr} :")
         question_message = await ctx.send(file=discord.File(io.BytesIO(question.question_image), f"question_{nbr}.jpg"))
         for emoji in emojis:
             await question_message.add_reaction(emoji)
-        await bot.wait_for('reaction_add', check=check)
+        await bot.wait_for('reaction_add', check=check_res)
         complete_question_message = await question_message.channel.fetch_message(question_message.id)
         for answer in complete_question_message.reactions:
             if answer not in emojis or answer == '☑️' :
@@ -91,4 +102,12 @@ async def quiz_logic(ctx, db_path, game, bot):
                     continue
                 else:
                     get_answer(player, answer, id)
+        result_embed = question_results(nbr, question)
+
+        await ctx.send(f"Answer : {question.get_answer_emoji()}")
+        answer_message = await ctx.send(file=discord.File(io.BytesIO(question.answer_image), f"answer_{nbr}.jpg"))
+        await answer_message.add_reaction("⏭️")
+        await ctx.send(embed=result_embed)
+
+        await bot.wait_for('reaction_add', check=check_next)
         nbr +=1
