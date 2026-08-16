@@ -1,6 +1,7 @@
 import discord
 import io
 
+
 from src.database import *
 
 def db_path(guild_id):
@@ -10,8 +11,8 @@ def db_path(guild_id):
 
 def check_player(db_path, discord_member):
     player = Player(db_path)
-    if discord_member.nick is not None:
-        player.name = discord_member.nick
+    if type(discord_member) == discord.Member:
+        player.name = discord_member.name
     else:
         player.name = discord_member.name
     player.discord_id = discord_member.id
@@ -23,15 +24,15 @@ def get_answer(player, answer, question_id):
     question = Question(player.db_path)
     question.get(question_id)
     choice = Choice(player.db_path)
-    choice.emoji = answer
+    choice.emoji = str(answer)
     choice.game = question.game
     choice.get_from_emoji()
-    player_answer = PlayerAnswer(player.db_path)
+    player_answer = PlayerAnswer(db_path=player.db_path)
     player_answer.question = question_id
     player_answer.player = player.id
     if player_answer.has_answered():
         return
-    player_answer.anwser = choice.id
+    player_answer.answer = choice.id
 
     if question.answer == choice.id:
         player_answer.result = 1
@@ -46,7 +47,7 @@ def question_results(question_nbr, question):
     for result in results:
         player = Player(question.db_path)
         player.get(result[0])
-        embed.add_field(name=player.name, value=f"{('❌','✅')[result[1]]}", inline=False)
+        embed.add_field(name=player.name, value=f"{('❌','✅')[result[1]]}", inline=True)
     return embed
 
 async def game_available(ctx, db_path, gamemaster):
@@ -94,11 +95,14 @@ async def quiz_logic(ctx, db_path, game, bot):
         await bot.wait_for('reaction_add', check=check_res)
         complete_question_message = await question_message.channel.fetch_message(question_message.id)
         for answer in complete_question_message.reactions:
-            if answer not in emojis or answer == '☑️' :
+            if str(answer) not in emojis or answer == '☑️' :
+                print("answer not in emojis")
                 continue
             async for user in answer.users(limit=None):
-                player = check_player(db_path, user.id)
+                player = check_player(db_path, user)
+                print(player.name)
                 if player.id == gamemaster.id or user == bot.user:
+                    print("Gamemaster/Bot")
                     continue
                 else:
                     get_answer(player, answer, id)

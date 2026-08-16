@@ -176,7 +176,7 @@ class Question(DBObject):
         query = "SELECT emoji FROM choices WHERE id = ?"
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
-        res = cur.execute(query, (self.id,))
+        res = cur.execute(query, (self.answer,))
         emoji = res.fetchone()
         con.close()
         return emoji[0]
@@ -206,7 +206,7 @@ class PlayerAnswer(DBObject):
         super().__init__(db_path, id)
         self.question: Optional[str] = None
         self.player: Optional[str] = None
-        self.anwser: Optional[str] = None
+        self.answer: Optional[str] = None
         self.result: Optional[int] = None
 
     def has_answered(self):
