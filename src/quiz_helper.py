@@ -11,8 +11,8 @@ def db_path(guild_id):
 
 def check_player(db_path, discord_member):
     player = Player(db_path)
-    if type(discord_member) == discord.Member:
-        player.name = discord_member.name
+    if discord_member.nick is not None:
+        player.name = discord_member.nick
     else:
         player.name = discord_member.name
     player.discord_id = discord_member.id
@@ -99,7 +99,9 @@ async def quiz_logic(ctx, db_path, game, bot):
                 print("answer not in emojis")
                 continue
             async for user in answer.users(limit=None):
-                player = check_player(db_path, user)
+                player = Player(db_path)
+                player.discord_id = user.id
+                player.is_player()
                 print(player.name)
                 if player.id == gamemaster.id or user == bot.user:
                     print("Gamemaster/Bot")

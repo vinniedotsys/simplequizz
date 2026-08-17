@@ -109,7 +109,7 @@ class Player(DBObject):
         if player is None:
             self.insert()
             return
-        if self.name != player[0]:
+        if self.name is not None and self.name != player[0]:
             self.id = player[1]
             self.update()
             return
