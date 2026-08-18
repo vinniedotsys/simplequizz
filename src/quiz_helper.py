@@ -47,7 +47,7 @@ def question_results(question_nbr, question):
     for result in results:
         player = Player(question.db_path)
         player.get(result[0])
-        embed.add_field(name=player.name, value=f"{('❌','✅')[result[1]]}", inline=True)
+        embed.add_field(name="\u200b", value=f"{player.name}: {('❌','✅')[result[1]]}", inline=True)
     return embed
 
 async def game_available(ctx, db_path, gamemaster):
@@ -96,15 +96,12 @@ async def quiz_logic(ctx, db_path, game, bot):
         complete_question_message = await question_message.channel.fetch_message(question_message.id)
         for answer in complete_question_message.reactions:
             if str(answer) not in emojis or answer == '☑️' :
-                print("answer not in emojis")
                 continue
             async for user in answer.users(limit=None):
                 player = Player(db_path)
                 player.discord_id = user.id
                 player.is_player()
-                print(player.name)
                 if player.id == gamemaster.id or user == bot.user:
-                    print("Gamemaster/Bot")
                     continue
                 else:
                     get_answer(player, answer, id)
