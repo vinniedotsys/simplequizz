@@ -4,8 +4,10 @@ import io
 
 from src.database import *
 
+### Return DB path
+### guild_id = discord.Guild.id
+### return str
 def db_path(guild_id):
-    
     return "data/" + str(guild_id) + ".db"
 
 
