@@ -21,7 +21,10 @@ def check_player(db_path, discord_member):
     player.is_player()
     return player
 
-
+### For a reaction, create player answer if none already exist
+### player = Player Object
+### answer = str
+### question_id = str
 def get_answer(player, answer, question_id):
     question = Question(player.db_path)
     question.get(question_id)
