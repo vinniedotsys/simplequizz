@@ -46,6 +46,10 @@ def get_answer(player, answer, question_id):
 
     player_answer.insert()
 
+### Return an embed with the results for a question
+### question_nbr = int
+### question = Question Object
+### return discord.Embed
 def question_results(question_nbr, question):
     results = question.get_results()
     embed = discord.Embed(title=f"Question {question_nbr} results :", color=0xeceff4)
