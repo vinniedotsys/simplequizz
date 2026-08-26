@@ -59,6 +59,11 @@ def question_results(question_nbr, question):
         embed.add_field(name="\u200b", value=f"{player.name}: {('❌','✅')[result[1]]}", inline=True)
     return embed
 
+### Check for unplayed game(s) where the user launching the comand is the game master
+### ctx = discord.Context
+### db_path = str
+### gamemaster = str
+### return int, str
 async def game_available(ctx, db_path, gamemaster):
     game = Game(db_path)
     game.gamemaster = str(gamemaster)
