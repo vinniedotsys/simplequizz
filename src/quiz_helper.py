@@ -82,6 +82,11 @@ async def game_available(ctx, db_path, gamemaster):
                 await ctx.send(f"Game {nb} : {game[1]} questions")
     return nbr_games, games_available
 
+### Main game logic
+### ctx = discord.Context
+### db_path = str
+### game = str
+### bot = discord.Bot
 async def quiz_logic(ctx, db_path, game, bot):
     current_quiz = Game(db_path)
     current_quiz.get(game)
