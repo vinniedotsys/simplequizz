@@ -4,6 +4,8 @@ import random
 
 from src.database import *
 
+### Convert image to Base64
+### path = str
 def image_to_base64(path):
     if not os.path.isfile(path):
         raise Exception(f"Image not found : {path}")
