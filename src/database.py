@@ -152,6 +152,39 @@ class Game(DBObject):
         con.close()
         return [e[0] for e in emojis]
 
+    def rankings(self):
+        query = """
+        SELECT RANK() OVER (ORDER BY correct_answers DESC) AS rank,
+            player_id,
+            player_name,
+            correct_answers,
+            total_answered,
+            score_percentage
+        FROM (
+                SELECT 
+                    p.id AS player_id,
+                    p.name AS player_name,
+                    COUNT(pa.id) AS total_answered,
+                    SUM(CASE WHEN pa.result = true THEN 1 ELSE 0 END) AS correct_answers,
+                    ROUND(
+                        SUM(CASE WHEN pa.result = true THEN 1 ELSE 0 END) * 100.0 
+                        / g.question_number, 2
+                    ) AS score_percentage
+                FROM player_answers pa
+                JOIN questions q ON pa.question = q.id
+                JOIN games g ON q.game = g.id
+                JOIN players p ON pa.player = p.id
+                WHERE g.id = ?
+                GROUP BY p.id, p.name, g.question_number
+            ) AS game_scores
+        ORDER BY rank;"""
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.id,))
+        results = res.fetchall()
+        con.close()
+        return results
+
 class Question(DBObject):
     TABLE = "questions"
     FIELDS = "(id TEXT PRIMARY KEY, game TEXT, answer TEXT, question_image BLOB, answer_image BLOB, number INTEGER, FOREIGN KEY(game) REFERENCES games(id), FOREIGN KEY(answer) REFERENCES choices(id))"

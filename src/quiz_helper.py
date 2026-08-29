@@ -59,6 +59,12 @@ def question_results(question_nbr, question):
         embed.add_field(name="\u200b", value=f"{player.name}: {('❌','✅')[result[1]]}", inline=True)
     return embed
 
+### Return and embed with the game rankings
+### game = Game object
+### return discord.Embed
+def game_rankings(game):
+    rankings = game.rankings()
+
 ### Check for unplayed game(s) where the user launching the comand is the game master
 ### ctx = discord.Context
 ### db_path = str
