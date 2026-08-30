@@ -52,18 +52,29 @@ def get_answer(player, answer, question_id):
 ### return discord.Embed
 def question_results(question_nbr, question):
     results = question.get_results()
-    embed = discord.Embed(title=f"Question {question_nbr} results :", color=0xeceff4)
+    embed = discord.Embed(title=f"Question {question_nbr} results :", color=0x81a1c1)
     for result in results:
         player = Player(question.db_path)
         player.get(result[0])
-        embed.add_field(name="\u200b", value=f"{player.name}: {('❌','✅')[result[1]]}", inline=True)
+        embed.add_field(name="\u200b", value=f"**{player.name}**: {('❌','✅')[result[1]]}", inline=False)
     return embed
 
 ### Return and embed with the game rankings
 ### game = Game object
 ### return discord.Embed
 def game_rankings(game):
+    rank_emojis = {
+    1: "🥇",
+    2: "🥈",
+    3: "🥉",
+    }
     rankings = game.rankings()
+    embed = discord.Embed(title="Score :", color=0x81a1c1)
+    for rank in rankings:
+        emoji = rank_emojis.get(rank[0], "")
+        prefix = f"{emoji} " if emoji else f"{rank[0]} "
+        embed.add_field(name="\u200b", value=f"{prefix} **{rank[2]}** : {rank[3]}/{rank[4]} *({rank[5]}%)*")
+    return embed
 
 ### Check for unplayed game(s) where the user launching the comand is the game master
 ### ctx = discord.Context
@@ -131,11 +142,13 @@ async def quiz_logic(ctx, db_path, game, bot):
                 else:
                     get_answer(player, answer, id)
         result_embed = question_results(nbr, question)
+        ranking_embed = game_rankings(current_quiz)
 
         await ctx.send(f"Answer : {question.get_answer_emoji()}")
         answer_message = await ctx.send(file=discord.File(io.BytesIO(question.answer_image), f"answer_{nbr}.jpg"))
         await answer_message.add_reaction("⏭️")
         await ctx.send(embed=result_embed)
+        await ctx.send(embed=ranking_embed)
 
         await bot.wait_for('reaction_add', check=check_next)
         nbr +=1
