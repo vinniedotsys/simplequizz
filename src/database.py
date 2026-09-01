@@ -89,6 +89,15 @@ class DBObject:
         self.get(self.id)
 
 
+    def delete(self):
+        self.get()
+        query = f"DELETE FROM {self.TABLE} WHERE id = ?"
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        cur.execute(query, (self.id))
+        con.commit()
+        con.close()
+
 class Player(DBObject):
     TABLE = "players"
     FIELDS = "(id TEXT PRIMARY KEY, name TEXT, discord_id INTEGER)"
@@ -184,6 +193,22 @@ class Game(DBObject):
         results = res.fetchall()
         con.close()
         return results
+
+    def answers(self):
+        query = """
+                SELECT pa.id
+                FROM player_anwsers pa
+                JOIN question q on pa.question = q.id
+                WHERE q.game = ?
+                ORDER BY pa.id
+        """
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.id,))
+        answers = res.fetchall()
+        con.close()
+        return [a[0] for a in answers]
+
 
 class Question(DBObject):
     TABLE = "questions"
