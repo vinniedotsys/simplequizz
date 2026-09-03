@@ -94,7 +94,7 @@ class DBObject:
         query = f"DELETE FROM {self.TABLE} WHERE id = ?"
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
-        cur.execute(query, (self.id))
+        cur.execute(query, (self.id,))
         con.commit()
         con.close()
 
@@ -197,8 +197,8 @@ class Game(DBObject):
     def answers(self):
         query = """
                 SELECT pa.id
-                FROM player_anwsers pa
-                JOIN question q on pa.question = q.id
+                FROM player_answers pa
+                JOIN questions q on pa.question = q.id
                 WHERE q.game = ?
                 ORDER BY pa.id
         """
