@@ -16,6 +16,9 @@ def check_and_exec(function, params):
         print("Valid functions are : ", functions_list)
 
 
+### Delete all answers for a given game
+### db_path = str
+### game_id = str
 def clear_results(db_path, game_id):
     game = Game(db_path=db_path, id=game_id)
     answsers = game.answers()
