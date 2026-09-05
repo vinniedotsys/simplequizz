@@ -59,7 +59,7 @@ def question_results(question_nbr, question):
         embed.add_field(name="\u200b", value=f"**{player.name}**: {('❌','✅')[result[1]]}", inline=False)
     return embed
 
-### Return and embed with the game rankings
+### Return an embed with the game rankings
 ### game = Game object
 ### return discord.Embed
 def game_rankings(game):
@@ -75,6 +75,14 @@ def game_rankings(game):
         prefix = f"{emoji} " if emoji else f"{rank[0]} "
         embed.add_field(name="\u200b", value=f"{prefix} **{rank[2]}** : {rank[3]}/{rank[4]} *({rank[5]}%)*")
     return embed
+
+### Designated game winner based on rankings and return an embed
+### game = Game object
+### return discord.Embed
+def game_winner(game):
+    rankings = game.rankings()
+    game.winner = rankings[0]
+
 
 ### Check for unplayed game(s) where the user launching the comand is the game master
 ### ctx = discord.Context
