@@ -73,7 +73,7 @@ def game_rankings(game):
     for rank in rankings:
         emoji = rank_emojis.get(rank[0], "")
         prefix = f"{emoji} " if emoji else f"{rank[0]} "
-        embed.add_field(name="\u200b", value=f"{prefix} **{rank[2]}** : {rank[3]}/{rank[4]} *({rank[5]}%)*")
+        embed.add_field(name="\u200b", value=f"{prefix} **{rank[2]}** : {rank[3]}")
     return embed
 
 ### Designated game winner based on rankings and return an embed
@@ -81,7 +81,9 @@ def game_rankings(game):
 ### return discord.Embed
 def game_winner(game):
     rankings = game.rankings()
-    game.winner = rankings[0]
+    print(rankings)
+    game.winner = rankings[0][2]
+    game.update()
 
 
 ### Check for unplayed game(s) where the user launching the comand is the game master
@@ -160,3 +162,5 @@ async def quiz_logic(ctx, db_path, game, bot):
 
         await bot.wait_for('reaction_add', check=check_next)
         nbr +=1
+
+    game_winner(current_quiz)
