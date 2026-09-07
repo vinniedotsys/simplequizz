@@ -84,6 +84,9 @@ def game_winner(game):
     print(rankings)
     game.winner = rankings[0][2]
     game.update()
+    embed = discord.Embed(title="Winner :", color=0x81a1c1)
+
+    return embed
 
 
 ### Check for unplayed game(s) where the user launching the comand is the game master
