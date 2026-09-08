@@ -16,8 +16,9 @@ def check_player(db_path, discord_member):
     if discord_member.nick is not None:
         player.name = discord_member.nick
     else:
-        player.name = discord_member.name
+        player.name = discord_member.display_name
     player.discord_id = discord_member.id
+    player.discord_avatar = discord_member.display_avatar.url
     player.is_player()
     return player
 
@@ -83,8 +84,11 @@ def game_winner(game):
     rankings = game.rankings()
     print(rankings)
     game.winner = rankings[0][2]
+    winner = Player(db_path=game.db_path, id=game.winner)
+    winner.get()
     game.update()
-    embed = discord.Embed(title="Winner :", color=0x81a1c1)
+    embed = discord.Embed(title=f"Winner : {game.winner}", color=0xebcb8b)
+    embed.set_thumbnail(url=winner.discord_avatar)
 
     return embed
 

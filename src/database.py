@@ -100,11 +100,12 @@ class DBObject:
 
 class Player(DBObject):
     TABLE = "players"
-    FIELDS = "(id TEXT PRIMARY KEY, name TEXT, discord_id INTEGER)"
+    FIELDS = "(id TEXT PRIMARY KEY, name TEXT, discord_id INTEGER, discord_avatar TEXT)"
     def __init__(self, db_path, id=None) -> None:
         super().__init__(db_path, id)
         self.name: Optional[str] = None
         self.discord_id: Optional[int] = None
+        self.discord_avatar: Optional[str] = None
 
     def is_player(self):
         if self.discord_id is None:
