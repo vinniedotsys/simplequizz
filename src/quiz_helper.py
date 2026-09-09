@@ -82,12 +82,11 @@ def game_rankings(game):
 ### return discord.Embed
 def game_winner(game):
     rankings = game.rankings()
-    print(rankings)
-    game.winner = rankings[0][2]
+    game.winner = rankings[0][1]
     winner = Player(db_path=game.db_path, id=game.winner)
     winner.get()
     game.update()
-    embed = discord.Embed(title=f"Winner : {game.winner}", color=0xebcb8b)
+    embed = discord.Embed(title=f"Winner : {winner.name}", color=0xebcb8b)
     embed.set_thumbnail(url=winner.discord_avatar)
 
     return embed
@@ -170,4 +169,5 @@ async def quiz_logic(ctx, db_path, game, bot):
         await bot.wait_for('reaction_add', check=check_next)
         nbr +=1
 
-    game_winner(current_quiz)
+    winner_embed = game_winner(current_quiz)
+    await ctx.send(embed=winner_embed)
