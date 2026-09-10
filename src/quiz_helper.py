@@ -147,7 +147,7 @@ async def quiz_logic(ctx, db_path, game, bot):
         await bot.wait_for('reaction_add', check=check_res)
         complete_question_message = await question_message.channel.fetch_message(question_message.id)
         for answer in complete_question_message.reactions:
-            if str(answer) not in emojis or answer == '☑️' :
+            if str(answer) not in emojis or str(answer) == '☑️' :
                 continue
             async for user in answer.users(limit=None):
                 player = Player(db_path)
