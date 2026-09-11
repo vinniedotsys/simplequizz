@@ -126,6 +126,43 @@ class Player(DBObject):
         self.get(player[1])
         return
 
+    def games_won(self):
+        query = """
+            SELECT 
+                p.id AS player_id,
+                p.name AS player_name,
+                COUNT(g.id) AS games_won
+            FROM players p
+            LEFT JOIN games g ON g.winner = p.id
+            WHERE p.id = ?
+            GROUP BY p.id, p.name;
+        """
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.id,))
+        wins = res.fetchall()
+        con.close()
+        return wins
+
+    def wins_ranking(self):
+        query = """
+        SELECT 
+            p.id AS player_id,
+            p.name AS player_name,
+            COUNT(g.id) AS games_won
+        FROM players p
+        LEFT JOIN games g ON g.winner = p.id
+        GROUP BY p.id, p.name
+        ORDER BY games_won DESC;
+        """
+        con = sqlite3.connect(self.db_path)
+        cur = con.cursor()
+        res = cur.execute(query, (self.id,))
+        wins_ranking = res.fetchall()
+        con.close()
+        return wins_ranking
+
+
 class Game(DBObject):
     TABLE = "games"
     FIELDS = "(id TEXT PRIMARY KEY, question_number INTEGER, winner TEXT, gamemaster TEXT, FOREIGN KEY(winner,gamemaster) REFERENCES players(id,id))"
