@@ -81,6 +81,11 @@ def game_rankings(game):
 ### game = Game object
 ### return discord.Embed
 def game_winner(game):
+    rank_prefix = {
+    1: "st",
+    2: "nd",
+    3: "rd",
+    }
     rankings = game.rankings()
     game.winner = rankings[0][1]
     winner = Player(db_path=game.db_path, id=game.winner)
@@ -88,7 +93,10 @@ def game_winner(game):
     game.update()
     embed = discord.Embed(title=f"Winner : {winner.name}", color=0xebcb8b)
     embed.set_thumbnail(url=winner.discord_avatar)
-
+    wins = int(winner.games_won()[0][2])
+    prefix = rank_prefix.get(wins, "")
+    won = f"{wins}{prefix}" if prefix else f"{wins}th"
+    embed.add_field(name=f"{winner.name} {won} victory !", value=f"{wins * "👑"}", inline=True)
     return embed
 
 
