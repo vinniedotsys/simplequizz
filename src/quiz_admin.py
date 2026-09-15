@@ -21,7 +21,10 @@ def check_and_exec(function, params):
 ### game_id = str
 def clear_results(db_path, game_id):
     game = Game(db_path=db_path, id=game_id)
+    game.get()
     answsers = game.answers()
     for answer in answsers:
         to_delete  = PlayerAnswer(db_path=db_path, id=answer)
         to_delete.delete()
+    game.winner = None
+    game.update()
