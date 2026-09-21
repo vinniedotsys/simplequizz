@@ -110,7 +110,7 @@ class Player(DBObject):
     def is_player(self):
         if self.discord_id is None:
             Exception("No valid Discord User ID")
-        query = "SELECT name,id FROM players WHERE discord_id = ?"
+        query = "SELECT name,id,discord_avatar FROM players WHERE discord_id = ?"
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
         res = cur.execute(query, (self.discord_id,))
@@ -120,6 +120,10 @@ class Player(DBObject):
             self.insert()
             return
         if self.name is not None and self.name != player[0]:
+            self.id = player[1]
+            self.update()
+            return
+        if self.discord_avatar is not None and self.discord_avatar != player[2]:
             self.id = player[1]
             self.update()
             return
