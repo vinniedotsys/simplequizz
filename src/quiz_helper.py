@@ -96,6 +96,7 @@ def game_winner(game):
     wins = int(winner.games_won()[0][2])
     prefix = rank_prefix.get(wins, "")
     won = f"{wins}{prefix}" if prefix else f"{wins}th"
+    s = "'" if winner.name[-1] == "s" else "'s" 
     embed.add_field(name=f"{winner.name} {won} victory !", value=f"{wins * "👑"}", inline=True)
     return embed
 
