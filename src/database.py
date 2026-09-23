@@ -251,6 +251,9 @@ class Game(DBObject):
         con.close()
         return [a[0] for a in answers]
 
+    def leaders(self):
+        rankings = self.rankings()
+
 
 class Question(DBObject):
     TABLE = "questions"
