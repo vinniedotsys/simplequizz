@@ -253,6 +253,7 @@ class Game(DBObject):
 
     def leaders(self):
         rankings = self.rankings()
+        top_score = rankings[0][3]
 
 
 class Question(DBObject):
