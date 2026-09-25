@@ -254,6 +254,12 @@ class Game(DBObject):
     def leaders(self):
         rankings = self.rankings()
         top_score = rankings[0][3]
+        leaders = []
+        for rank in rankings:
+            if rank[3] == top_score:
+                leaders.append((rank[0],rank[1]))
+        return leaders
+
 
 
 class Question(DBObject):
