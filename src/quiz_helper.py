@@ -87,18 +87,20 @@ def game_winner(game):
     3: "rd",
     }
     rankings = game.rankings()
-    game.winner = rankings[0][1]
-    winner = Player(db_path=game.db_path, id=game.winner)
-    winner.get()
-    game.update()
-    embed = discord.Embed(title=f"Winner : {winner.name}", color=0xebcb8b)
-    embed.set_thumbnail(url=winner.discord_avatar)
-    wins = int(winner.games_won()[0][2])
-    prefix = rank_prefix.get(wins, "")
-    won = f"{wins}{prefix}" if prefix else f"{wins}th"
-    s = "'" if winner.name[-1] == "s" else "'s" 
-    embed.add_field(name=f"{winner.name} {won} victory !", value=f"{wins * "👑"}", inline=True)
-    return embed
+    leaders = game.leaders()
+    if len(leaders) == 1:
+        game.winner = rankings[0][1]
+        winner = Player(db_path=game.db_path, id=game.winner)
+        winner.get()
+        game.update()
+        embed = discord.Embed(title=f"Winner : {winner.name}", color=0xebcb8b)
+        embed.set_thumbnail(url=winner.discord_avatar)
+        wins = int(winner.games_won()[0][2])
+        prefix = rank_prefix.get(wins, "")
+        won = f"{wins}{prefix}" if prefix else f"{wins}th"
+        s = "'" if winner.name[-1] == "s" else "'s" 
+        embed.add_field(name=f"{winner.name} {won} victory !", value=f"{wins * "👑"}", inline=True)
+        return embed
 
 
 ### Check for unplayed game(s) where the user launching the comand is the game master
