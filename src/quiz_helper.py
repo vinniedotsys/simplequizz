@@ -101,7 +101,12 @@ def game_winner(game):
         s = "'" if winner.name[-1] == "s" else "'s" 
         embed.add_field(name=f"{winner.name} {won} victory !", value=f"{wins * "👑"}", inline=True)
         return embed
-
+    
+    tie_embed = discord.Embed(title="It's a tie", color=0x81a1c1)
+    for leader in leaders:
+        tie_embed.add_field(name=f"{leader[1]}", value=f"{rankings[0][3]}", inline=True)
+    tie_embed.add_field(name="\u200b", value="Add more questions to break the tie", inline=False)
+    return tie_embed
 
 ### Check for unplayed game(s) where the user launching the comand is the game master
 ### ctx = discord.Context
