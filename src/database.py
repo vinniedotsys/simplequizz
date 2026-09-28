@@ -172,7 +172,7 @@ class Game(DBObject):
     FIELDS = "(id TEXT PRIMARY KEY, question_number INTEGER, winner TEXT, gamemaster TEXT, FOREIGN KEY(winner,gamemaster) REFERENCES players(id,id))"
     def __init__(self, db_path, id=None) -> None:
         super().__init__(db_path, id)
-        self.question_number: Optional[int] = None
+        self.question_number = 0
         self.winner: Optional[str] = None
         self.gamemaster: Optional[str] = None
 

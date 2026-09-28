@@ -28,3 +28,9 @@ def clear_results(db_path, game_id):
         to_delete.delete()
     game.winner = None
     game.update()
+
+### Add more questions to a given game
+### db_path = str
+### game_id = str
+def add_questions(db_path, game_id):
+    pass
