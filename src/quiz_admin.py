@@ -2,7 +2,7 @@ import inspect
 import sys
 
 from src.database import *
-
+from src.create_quiz import add_questions_to_game
 
 def check_and_exec(function, params):
     current_module = sys.modules[__name__]
@@ -32,5 +32,6 @@ def clear_results(db_path, game_id):
 ### Add more questions to a given game
 ### db_path = str
 ### game_id = str
-def add_questions(db_path, game_id):
-    pass
+### questions = json
+def add_questions(db_path, game_id, questions):
+    add_questions_to_game(db_path, game_id, questions)
