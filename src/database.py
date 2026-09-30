@@ -18,6 +18,7 @@ class DBObject:
         self.check_db()
         self.check_table()
 
+### check_db : Check if db file exists, creates it if it does not
     def check_db(self):
         directory = os.path.dirname(self.db_path)
         if not os.path.exists(directory):
@@ -26,6 +27,8 @@ class DBObject:
         if not os.path.isfile(self.db_path):
             with open(self.db_path, 'w') as f:
                 return
+
+### check_table : Check if table exist in DB, creates it from Class if not
     def check_table(self):
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
