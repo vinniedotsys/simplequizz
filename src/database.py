@@ -37,6 +37,8 @@ class DBObject:
             cur.execute(f"CREATE TABLE {self.TABLE}{self.FIELDS}")
         con.close()
 
+### get : Get record from id
+### id = str
     def get(self, id=None):
         if id is None:
             id = self.id
