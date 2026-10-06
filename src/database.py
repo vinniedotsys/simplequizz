@@ -59,6 +59,7 @@ class DBObject:
                 setattr(self, keys, line[i])
                 i += 1
 
+### insert : Create new record in DB for object
     def insert(self):
         excluded = {"db_path", "id"}
         data = {k: v for k, v in vars(self).items() if k not in excluded}
