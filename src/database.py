@@ -78,6 +78,7 @@ class DBObject:
      
         self.get()
 
+### update : Update current record in DB
     def update(self):
         excluded = {"db_path", "id"}
         data = {k: v for k, v in vars(self).items() if k not in excluded}
