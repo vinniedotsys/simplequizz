@@ -96,6 +96,7 @@ class DBObject:
         self.get(self.id)
 
 
+### delete : Delete current record in DB
     def delete(self):
         self.get()
         query = f"DELETE FROM {self.TABLE} WHERE id = ?"
