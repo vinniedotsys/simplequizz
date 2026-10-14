@@ -115,6 +115,7 @@ class Player(DBObject):
         self.discord_id: Optional[int] = None
         self.discord_avatar: Optional[str] = None
 
+### is_player : Check if player exist in DB based on their discord_id, creates them if they dont
     def is_player(self):
         if self.discord_id is None:
             Exception("No valid Discord User ID")
