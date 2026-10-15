@@ -22,6 +22,7 @@ def add_questions_to_game(db_path, game_id, questions):
     for key in questions:
         question_choice = Choice(db_path)
         question_choice.emoji = questions[key][1]
+        question_choice.game = game.id
         question_choice.get_from_emoji()
 
         new_question = Question(db_path)
