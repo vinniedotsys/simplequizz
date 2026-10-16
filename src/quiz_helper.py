@@ -74,7 +74,7 @@ def game_rankings(game):
     for rank in rankings:
         emoji = rank_emojis.get(rank[0], "")
         prefix = f"{emoji} " if emoji else f"{rank[0]} "
-        embed.add_field(name="\u200b", value=f"{prefix} **{rank[2]}** : {rank[3]}")
+        embed.add_field(name="\u200b", value=f"{prefix} **{rank[2]}** : {rank[3]}", inline=False)
     return embed
 
 ### Designated game winner based on rankings and return an embed
