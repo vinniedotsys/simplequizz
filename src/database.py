@@ -139,6 +139,7 @@ class Player(DBObject):
         self.get(player[1])
         return
 
+### games_won : Return number of games won by the player
     def games_won(self):
         query = """
             SELECT 
