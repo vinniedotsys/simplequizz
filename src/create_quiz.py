@@ -16,8 +16,7 @@ def add_questions_to_game(db_path, game_id, questions):
     game = Game(db_path, game_id)
     game.get()
 
-    order_num = [i for i in range(game.question_number, len(questions))]
-    random.shuffle(order_num)
+    order_num = [i for i in range(game.question_number, (len(questions) + game.question_number))]
 
     for key in questions:
         question_choice = Choice(db_path)
@@ -38,7 +37,7 @@ def add_questions_to_game(db_path, game_id, questions):
 
 def create_from_conf(db_path, conf_path):
     if not os.path.isfile(conf_path):
-        raise Exception(f"Image not found : {conf_path}")
+        raise Exception(f"Conf JSON not found : {conf_path}")
     with open(conf_path, 'r') as conf:
         conf_dict = json.loads(conf.read())
 

@@ -267,7 +267,7 @@ class Game(DBObject):
         leaders = []
         for rank in rankings:
             if rank[3] == top_score:
-                leaders.append((rank[0],rank[1]))
+                leaders.append((rank[1],rank[2]))
         return leaders
 
 

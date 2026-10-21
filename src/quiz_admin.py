@@ -1,4 +1,5 @@
 import inspect
+import json
 import sys
 
 from src.database import *
@@ -33,5 +34,12 @@ def clear_results(db_path, game_id):
 ### db_path = str
 ### game_id = str
 ### questions = json
-def add_questions(db_path, game_id, questions):
+def add_questions(db_path, game_id, questions_json):
+    if not os.path.isfile(questions_json):
+        raise Exception(f"Conf JSON not found : {questions_json}")
+    with open(questions_json, 'r') as conf:
+        add_questions_json = json.loads(conf.read())
+
+    questions = add_questions_json["questions"]
     add_questions_to_game(db_path, game_id, questions)
+
