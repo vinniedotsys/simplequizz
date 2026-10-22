@@ -179,10 +179,11 @@ class Player(DBObject):
 
 class Game(DBObject):
     TABLE = "games"
-    FIELDS = "(id TEXT PRIMARY KEY, question_number INTEGER, winner TEXT, gamemaster TEXT, FOREIGN KEY(winner,gamemaster) REFERENCES players(id,id))"
+    FIELDS = "(id TEXT PRIMARY KEY, question_number INTEGER, question_index INTEGER, winner TEXT, gamemaster TEXT, FOREIGN KEY(winner,gamemaster) REFERENCES players(id,id))"
     def __init__(self, db_path, id=None) -> None:
         super().__init__(db_path, id)
         self.question_number = 0
+        self.question_index = 0
         self.winner: Optional[str] = None
         self.gamemaster: Optional[str] = None
 
@@ -196,7 +197,15 @@ class Game(DBObject):
         return games
 
     def questions(self):
-        query = "SELECT id FROM questions WHERE game = ? ORDER BY number"
+        query = """
+        SELECT 
+            q.id AS question_id
+        FROM questions q
+        JOIN games g ON q.game = g.id
+        WHERE q.game = ?
+          AND q.number >= g.question_index
+        ORDER BY q.number ASC;
+        """
         con = sqlite3.connect(self.db_path)
         cur = con.cursor()
         res = cur.execute(query, (self.id,))

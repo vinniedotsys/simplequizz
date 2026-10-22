@@ -144,7 +144,6 @@ async def quiz_logic(ctx, db_path, game, bot):
     emojis.append("☑️")
     gamemaster = Player(db_path, current_quiz.gamemaster)
     gamemaster.get()
-    nbr = 1
 
 
     for id in questions:
@@ -154,10 +153,13 @@ async def quiz_logic(ctx, db_path, game, bot):
         def check_next(reaction, user):
             return user.id == gamemaster.discord_id and str(reaction.emoji) == '⏭️'
 
+        current_quiz.question_index += 1
+        current_quiz.update()
+
         question = Question(db_path, id)
         question.get()
-        await ctx.send(f"Question {nbr} :")
-        question_message = await ctx.send(file=discord.File(io.BytesIO(question.question_image), f"question_{nbr}.jpg"))
+        await ctx.send(f"Question {current_quiz.question_index} :")
+        question_message = await ctx.send(file=discord.File(io.BytesIO(question.question_image), f"question_{current_quiz.question_index}.jpg"))
         for emoji in emojis:
             await question_message.add_reaction(emoji)
         await bot.wait_for('reaction_add', check=check_res)
@@ -173,17 +175,16 @@ async def quiz_logic(ctx, db_path, game, bot):
                     continue
                 else:
                     get_answer(player, answer, id)
-        result_embed = question_results(nbr, question)
+        result_embed = question_results(current_quiz.question_index, question)
         ranking_embed = game_rankings(current_quiz)
 
         await ctx.send(f"Answer : {question.get_answer_emoji()}")
-        answer_message = await ctx.send(file=discord.File(io.BytesIO(question.answer_image), f"answer_{nbr}.jpg"))
+        answer_message = await ctx.send(file=discord.File(io.BytesIO(question.answer_image), f"answer_{current_quiz.question_index}.jpg"))
         await answer_message.add_reaction("⏭️")
         await ctx.send(embed=result_embed)
         await ctx.send(embed=ranking_embed)
 
         await bot.wait_for('reaction_add', check=check_next)
-        nbr +=1
 
     winner_embed = game_winner(current_quiz)
     await ctx.send(embed=winner_embed)

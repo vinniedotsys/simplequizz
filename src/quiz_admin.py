@@ -11,7 +11,6 @@ def check_and_exec(function, params):
     
     if function in functions_list:
         func = getattr(current_module, function)
-        print(*params)
         func(*params)
     else:
         print("Valid functions are : ", functions_list)
@@ -28,6 +27,7 @@ def clear_results(db_path, game_id):
         to_delete  = PlayerAnswer(db_path=db_path, id=answer)
         to_delete.delete()
     game.winner = None
+    game.question_index = 0
     game.update()
 
 ### Add more questions to a given game
