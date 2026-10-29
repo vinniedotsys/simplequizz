@@ -5,6 +5,7 @@ simple quiz on discord, using images as questions/results and emojis for answers
 `uv run quiz_loader.py <path/to/sqlite.db> <config.json>`
 
 The config JSON should respect the following structure :
+```
     {
       "gamemaster": "", //should be the gamemaster ID in the server's sqlite db
       "choices": [
@@ -17,3 +18,13 @@ The config JSON should respect the following structure :
         "build/question_3.jpg": ["build/answer_3.jpg", "✅"]
       }
     }
+```
+
+## Running the bot
+`uv run quiz_bot.py`
+
+## Bot commands
+
+### Launch a quiz
+Must be launched as gamemaster :
+`q!quiz`
